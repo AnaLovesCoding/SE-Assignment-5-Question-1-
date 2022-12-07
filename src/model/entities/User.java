@@ -2,20 +2,24 @@ package model.entities;
 
 public class User {
 	
+	private static  User instance;
+	
+	private User() {
+		
+	}
+	
+	public static User getInstance() {
+		if(instance == null) {
+			instance = new User();
+		}
+		return instance;
+	}
+	
 	private String userName;
 	
 	private String password;
 	
-	private static User instance;
-    
-    public static User getInstance(String userName, String password){
-        if (instance == null) {
-            instance = new User(userName, password);
-        }
-        return instance;
-    }
-	
-	private User (String userName, String password) {
+	public User (String userName, String password) {
 		this.userName = userName;
 		this.password = password;
 	}

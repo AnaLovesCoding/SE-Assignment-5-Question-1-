@@ -12,8 +12,8 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
-import businesslayer.LoginBusiness;
-import model.dataAccess.LoginDataAccess;
+import model.business.LoginBusiness;
+import model.dataccess.LoginDataAccess;
 import model.entities.MessageException;
 import model.entities.User;
 
@@ -89,20 +89,15 @@ public class LoginView extends JFrame implements ActionListener {
 	public void actionPerformed(ActionEvent event) {
 		if (event.getSource() == this.buttonSubmit) {
 			try {
+				LoginBusiness loginBusiness = LoginBusiness.getInstance(); 
+				loginBusiness.setUserName(txtUserName.getText());
+				loginBusiness.setPassword(txtPassword.getText());
 				
-				String userName = txtUserName.getText();
-				String password = txtPassword.getText();
-
-				LoginBusiness instance = LoginBusiness.getInstance();
-				boolean userVerified = instance.verifyUser(userName, password);
-				
-				if (userVerified) {
-					new LoginSuccessView(txtUserName.getText());
+				if (loginBusiness.verifyCredentials()) {
+					new LoginSuccessView(User.getInstance());
 					dispose();
 				}
-				else {
-					throw new MessageException("Incorrect credentials.");
-				}
+				
 				
 			} catch (MessageException e) {
 				JOptionPane.showMessageDialog (null, e.getMessage());

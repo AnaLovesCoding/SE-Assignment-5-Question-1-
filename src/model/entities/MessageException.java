@@ -1,6 +1,5 @@
 package model.entities;
 
-
 @SuppressWarnings("serial")
 public class MessageException extends RuntimeException {
 	

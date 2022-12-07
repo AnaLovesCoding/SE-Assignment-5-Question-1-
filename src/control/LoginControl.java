@@ -7,7 +7,9 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import model.dataAccess.LoginDataAccess;
+
+import model.business.LoginBusiness;
+import model.dataccess.LoginDataAccess;
 import model.entities.MessageException;
 import model.entities.User;
 
@@ -27,21 +29,12 @@ public class LoginControl extends HttpServlet {
 		
 		try {
 			
-			String userName = request.getParameter("username");
-			String password = request.getParameter("password");
+			LoginBusiness loginBusiness = LoginBusiness.getInstance();
+			loginBusiness.setUserName(request.getParameter("username"));
+			loginBusiness.setPassword(request.getParameter("password"));
 			
-			if (userName.equals("")) {
-				throw new MessageException("Username not informed.");
-			} else if (password.equals("")) {
-				throw new MessageException("Password not informed.");
-			} 
-			
-			User user = new User(userName, password);
-				
-			if (!(new LoginDataAccess().verifyCredentials(user))) {
-				throw new MessageException("Incorrect credentials.");
-			} else {
-				request.setAttribute("Username", request.getParameter("username"));
+			if (loginBusiness.verifyCredentials()) {
+				request.setAttribute("Username", User.getInstance().getUserName());
 				address = "/view/LoginSuccessView.jsp";
 			}
 
@@ -68,6 +61,5 @@ public class LoginControl extends HttpServlet {
 		rd.forward(request, response);
 
 	}
-	xknswjd
 	
 }
